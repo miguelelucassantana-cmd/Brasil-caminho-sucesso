@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brasil: O Caminho ao Poder</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;800&family=Source+Serif+4:wght@400;600&display=swap">
+<style>
+:root{--bg:#f2f3f5;--tx:#1b1f2a;--mu:#5d6475;--ln:#d3d7df;--ac:#9a6b00;--acb:#e0b43c;--on:#1b1f2a;--pn:#e6e8ed;--bad:#b3261e;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161b;--tx:#e9eaee;--mu:#9aa1b2;--ln:#2b303b;--ac:#e0b43c;--pn:#1d2028;--bad:#f2766d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14161b;--tx:#e9eaee;--mu:#9aa1b2;--ln:#2b303b;--ac:#e0b43c;--pn:#1d2028;--bad:#f2766d;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Libre Franklin",system-ui,-apple-system,"Segoe UI",sans-serif}
+#app{max-width:600px;margin:0 auto;padding:16px 16px 56px}
+h1{font:800 30px/1.1 "Libre Franklin",system-ui,sans-serif;letter-spacing:-.02em;margin:10px 0 8px}
+h2{font:600 15px "Libre Franklin",system-ui,sans-serif;color:var(--mu);margin:0 0 8px}
+.mu{color:var(--mu)}
+.sec{border-top:1px solid var(--ln);padding:14px 0}
+.nar{font:400 18px/1.65 "Source Serif 4",Georgia,serif}
+.nar p{margin:0 0 .8em}
+.tag{font:600 11px "Libre Franklin",sans-serif;padding:1px 6px;border-radius:3px;margin-right:4px;vertical-align:1px}
+.tag.r{background:var(--tx);color:var(--bg)}
+.tag.f{border:1px solid var(--mu);color:var(--mu)}
+label{display:block;font-size:14px;color:var(--mu);margin:10px 0 3px}
+input,textarea,select{width:100%;padding:10px;border:1px solid var(--ln);border-radius:4px;background:var(--bg);color:var(--tx);font:16px "Libre Franklin",system-ui,sans-serif}
+textarea{min-height:84px;resize:vertical}
+.btn{display:block;width:100%;padding:13px 14px;border:0;border-radius:4px;background:var(--acb);color:var(--on);font:600 16px "Libre Franklin",system-ui,sans-serif;cursor:pointer;margin:10px 0}
+.opt{display:block;width:100%;text-align:left;padding:12px 14px;margin:8px 0;border:1px solid var(--ln);border-left:4px solid var(--acb);border-radius:4px;background:var(--pn);color:var(--tx);font:16px/1.4 "Libre Franklin",system-ui,sans-serif;cursor:pointer}
+.btn:focus-visible,.opt:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--tx);outline-offset:2px}
+.bar{background:var(--pn);padding:12px;border-radius:4px;margin:8px 0 14px}
+.bar b{display:block;font-size:20px;line-height:1.2}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.chip{border-top:3px solid var(--acb);padding-top:4px;font-size:13px;color:var(--mu)}
+.chip b{font-size:18px;color:var(--tx);display:inline}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:10px}
+.ind{font-size:13px;color:var(--mu)}
+.ind span{float:right;color:var(--tx);font-weight:600}
+.ind i{display:block;height:5px;background:var(--ln);border-radius:3px;margin-top:2px;overflow:hidden}
+.ind i u{display:block;height:100%;background:var(--ac)}
+details summary{cursor:pointer;color:var(--mu);font-size:14px;margin-top:8px}
+.cons{border-left:4px solid var(--ln);padding-left:12px;color:var(--mu);font-size:15px}
+.err{color:var(--bad);font-weight:600}
+.link{background:none;border:0;color:var(--mu);text-decoration:underline;font:15px "Libre Franklin",system-ui,sans-serif;padding:12px 0;cursor:pointer}
+.log li{margin:4px 0;font-size:14px;color:var(--mu)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=t=>esc(t).split(/\n+/).map(p=>"<p>"+p.replace(/\[(REAL|FICÇÃO)\]/g,(m,k)=>"<span class=\"tag "+(k==="REAL"?"r":"f")+"\">"+k+"</span>")+"</p>").join("");
+const KEY="bcp-v1";
+const L={rep_nacional:"Reputação nacional",rep_estadual:"Reputação estadual",pop_municipal:"Popularidade municipal",pop_nacional:"Popularidade nacional",capital:"Capital político",influencia:"Influência partidária",experiencia:"Experiência política",credibilidade:"Credibilidade",confianca:"Confiança da população",base_eleitoral:"Base eleitoral (votos)",apoio_parlamentar:"Apoio parlamentar",articulacao:"Capacidade de articulação",dinheiro:"Caixa de campanha",rejeicao:"Rejeição popular",aprovacao:"Aprovação do mandato"};
+const PARTIDOS=["Sem filiação","PT","PL","PSD","MDB","União Brasil","PP","Republicanos","PSB","PDT","PSDB","PSOL","Podemos","Novo","Avante","Solidariedade","PCdoB","PV","Rede","Cidadania","PRD","Agir","DC","PMB","Mobiliza","PRTB","PCB","PCO","PSTU","UP","Missão"];
+const PROMPT=`Você é o MOTOR do jogo “Brasil: O Caminho ao Poder”, uma simulação política realista, difícil e imprevisível da política brasileira. O jogador só decide; você é o narrador, os adversários, a imprensa, os partidos, os eleitores e as instituições.
+REGRAS
+- Respeite a Constituição de 1988 e a legislação eleitoral: idades mínimas (vereador 18; prefeito e deputados 21; governador 30; presidente, vice e senador 35), duração dos mandatos, limites de reeleição, competências de municípios, estados e União, fidelidade partidária, filiação e domicílio eleitoral com 6 meses de antecedência, financiamento e limites de campanha. Nenhum cargo sem os requisitos; nenhum poder que não pertença ao cargo.
+- Dificuldade alta: sem vitórias gratuitas; nem toda decisão dá certo; não proteja o jogador de derrotas, crises e escândalos. Os indicadores se trocam (ganhar em um costuma custar em outro); nunca suba todos juntos.
+- Eleições com resultado não predeterminado, dependente das escolhas, da campanha, da conjuntura e de adversários que agem por conta própria: convenções, registro, pesquisas, propaganda, horário eleitoral gratuito, debates (economia, saúde, educação, segurança, infraestrutura, corrupção, meio ambiente, previdência, política externa, desigualdade), entrevistas, sabatinas, alianças e coligações legais, financiamento e prestação de contas, apuração, segundo turno e transição.
+- Cada cargo tem responsabilidades próprias (vereador fiscaliza, propõe e vota; prefeito administra orçamento, saúde, escolas, transporte; governador, a máquina estadual e a segurança; presidente, ministros, Congresso, sanção e veto, crises, economia, política externa).
+- Partidos reais (30 registrados no TSE; federações PT/PCdoB/PV, PSDB/Cidadania, PSOL/Rede) retratados sem caricatura, com o mesmo rigor para todos os campos políticos e sem opinião sua sobre qual lado é melhor. Inclua disputas internas, alianças com consequências, conflitos com dirigentes, expulsão e troca de partido dentro da lei.
+- Corrupção nunca é só ganho: traz risco jurídico, institucional e reputacional (investigações, processos, protestos, perda de apoio).
+- Imprensa, redes, protestos, sindicatos, empresários e oposição reagem. Crie acontecimentos inesperados com efeitos que duram meses ou anos.
+- O tempo avança em dias, semanas ou meses, nunca vários meses sem decisões importantes. A carreira pode durar décadas (reeleição, derrota, aposentadoria, volta, troca de partido).
+- Memória política: promessas e atos voltam a ser cobrados anos depois. Inclua bastidores do poder. Derrotas têm custo e abrem oportunidades. No fim da carreira (fim=true), apresente o balanço do legado.
+- Marque [REAL] os fatos públicos verificáveis e [FICÇÃO] o que for inventado. Nunca invente fatos históricos reais nem atribua falas a pessoas reais; sem dados confiáveis, crie adversários fictícios e diga. Ponto de partida real: novembro de 2026, com Lula reeleito em 25/10/2026; próximas eleições municipais em outubro de 2028. Seu conhecimento pode estar defasado: na dúvida, marque [FICÇÃO].
+- Aprovação não é intenção de voto. Faixas de aprovação: ótimo 75-100, bom 60-74, regular 45-59, ruim 30-44, péssimo abaixo de 30 (indicadores do jogo, não pesquisas reais).
+- Se o jogador escrever uma decisão própria, avalie realismo e legalidade e aplique consequências coerentes.
+SAÍDA: somente JSON, sem markdown:
+{"data":"mês/ano","cargo":"","partido":"","painel":{...},"consequencias":"2 a 5 frases sobre o que a decisão provocou","cenario":"narrativa detalhada de 1 a 3 parágrafos","decisoes":["3 a 5 opções curtas, sem revelar todos os resultados"],"registro":"1 frase factual para o histórico político","fim":false}
+Chaves do painel (inteiros de 0 a 100, exceto base_eleitoral em votos prováveis e dinheiro em reais): rep_nacional, rep_estadual, pop_municipal, pop_nacional, capital, influencia, experiencia, credibilidade, confianca, base_eleitoral, apoio_parlamentar, articulacao, dinheiro, rejeicao, aprovacao (null quando não há mandato).
+Se decisao_do_jogador for "INICIAR": crie o personagem a partir de "char" (sorteie o que estiver vazio), use valores iniciais modestos e coerentes com a história, deixe consequencias vazio e apresente o primeiro cenário.`;
+
+let S=null,sample=null,busy=false,err="",last="",ctl=null;
+try{S=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){}
+(async()=>{try{sample=window.claude?await claude.use("sample"):null}catch(e){sample=null}render()})();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+
+function start(){
+  const g=id=>$("#"+id).value.trim();
+  S={char:{nome:g("n"),idade:g("i"),local:g("l"),profissao:g("p"),escolaridade:g("e"),ideologia:g("o"),partido:g("pt"),historia:g("h")},painel:{},log:[],dec:[],cons:"",cenario:"",data:"",cargo:"",partido:"",fim:false};
+  turn("INICIAR");
+}
+async function turn(act){
+  if(!sample)return;
+  last=act;busy=true;err="";render();
+  ctl=new AbortController();
+  try{
+    const inp=PROMPT+"\n\nESTADO:\n"+JSON.stringify({char:S.char,data:S.data,cargo:S.cargo,partido:S.partido,painel:S.painel,historico:S.log.slice(-40),cenario_anterior:S.cenario,decisao_do_jogador:act});
+    const r=await sample.json(inp,{cache:false,signal:ctl.signal});
+    S.data=r.data||S.data;S.cargo=r.cargo||S.cargo;S.partido=r.partido||S.partido;
+    S.painel=Object.assign({},S.painel,r.painel||{});
+    S.cons=r.consequencias||"";S.cenario=r.cenario||"";S.dec=Array.isArray(r.decisoes)?r.decisoes:[];S.fim=!!r.fim;
+    if(r.registro)S.log.push((r.data||"")+": "+r.registro);
+    save();
+  }catch(e){err=(e&&e.code)||"upstream_error";if(err==="cancelled")err=""}
+  busy=false;render();
+}
+function own(){const t=$("#own").value.trim();if(t)turn(t)}
+function reset(){if(confirm("Apagar esta carreira e recomeçar?")){S=null;try{localStorage.removeItem(KEY)}catch(e){}render()}}
+const MSG={not_granted:"Este jogo usa o Claude como motor. Autorize o uso quando o aviso aparecer.",sampling_disabled:"O Claude não está disponível nesta conta.",rate_limited:"Muitas chamadas seguidas. Espere um pouco e tente de novo.",invalid_json:"A resposta do motor veio incompleta.",session_expired:"Sua sessão expirou. Entre de novo no Claude."};
+
+function ind(k,v){
+  if(v==null)return "<div class=ind>"+L[k]+"<span>—</span></div>";
+  if(k==="dinheiro")return "<div class=ind>"+L[k]+"<span>R$ "+Number(v).toLocaleString("pt-BR")+"</span></div>";
+  if(k==="base_eleitoral")return "<div class=ind>"+L[k]+"<span>"+Number(v).toLocaleString("pt-BR")+"</span></div>";
+  const p=Math.max(0,Math.min(100,+v||0));
+  return "<div class=ind>"+L[k]+"<span>"+p+"</span><i><u style=\"width:"+p+"%\"></u></i></div>";
+}
+function intro(){
+  let h="<h1>Brasil: O Caminho ao Poder</h1><p class=mu>Simulador político em que você começa do zero e tenta chegar o mais longe possível. O Claude é o motor do jogo: narra, cria os adversários e reage às suas decisões. Deixe qualquer campo em branco para que ele sorteie.</p>";
+  if(!sample)h+="<p class=err>Este jogo só funciona dentro do Claude, que alimenta o motor da simulação.</p>";
+  if(err)h+="<p class=err>"+esc(MSG[err]||"Não foi possível começar agora. Tente de novo.")+"</p>";
+  h+="<div class=sec><label for=n>Nome político</label><input id=n><label for=i>Idade</label><input id=i inputmode=numeric><label for=l>Estado e município de origem</label><input id=l><label for=p>Profissão</label><input id=p><label for=e>Escolaridade</label><input id=e><label for=o>Ideologia política</label><input id=o placeholder=\"ex.: centro-esquerda, liberal, conservador…\"><label for=pt>Partido</label><input id=pt list=pl><datalist id=pl>"+PARTIDOS.map(x=>"<option value=\""+x+"\">").join("")+"</datalist><label for=h>História pessoal e trajetória</label><textarea id=h></textarea><button class=btn "+(sample?"":"disabled")+" onclick=\"start()\">Começar nova carreira</button></div>";
+  return h;
+}
+function game(){
+  const P=S.painel||{};
+  let h="<div class=bar><span class=mu>"+esc(S.data)+"</span><b>"+esc(S.char.nome||"Personagem")+"</b><span>"+esc(S.cargo||"Cidadão sem mandato")+", "+esc(S.partido||"sem partido")+"</span><div class=chips>"+[["pop_nacional","Popularidade"],["capital","Capital político"],["aprovacao","Aprovação"]].map(([k,t])=>"<div class=chip>"+t+"<br><b>"+(P[k]==null?"—":esc(P[k]))+"</b></div>").join("")+"</div><details><summary>Painel político completo</summary><div class=grid>"+Object.keys(L).map(k=>ind(k,P[k])).join("")+"</div></details></div>";
+  if(S.cons)h+="<div class=cons>"+fmt(S.cons)+"</div>";
+  h+="<div class=sec><h2>Cenário atual</h2><div class=nar>"+fmt(S.cenario)+"</div></div>";
+  if(busy)return h+"<div class=sec><p class=mu>O motor do jogo está pensando…</p><button class=link onclick=\"ctl&&ctl.abort()\">Parar</button></div>";
+  if(err)h+="<p class=err>"+esc(MSG[err]||"Não foi possível continuar agora.")+"</p><button class=btn onclick=\"turn(last)\">Tentar de novo</button>";
+  if(S.fim)h+="<div class=sec><h2>Fim da carreira</h2><p>Sua trajetória terminou. Veja o histórico abaixo ou comece outra.</p></div>";
+  else if(!err)h+="<div class=sec><h2>Decisões</h2>"+S.dec.map((d,i)=>"<button class=opt onclick=\"turn(S.dec["+i+"])\">"+esc(d)+"</button>").join("")+"<label for=own>Ou escreva sua própria decisão</label><textarea id=own></textarea><button class=btn onclick=\"own()\">Decidir</button></div>";
+  h+="<details><summary>Histórico político ("+S.log.length+")</summary><ul class=log>"+S.log.map(x=>"<li>"+esc(x)+"</li>").join("")+"</ul></details><button class=link onclick=\"reset()\">Recomeçar do zero</button>";
+  return h;
+}
+let showIntro=false;
+function render(force){
+  if(force===true)showIntro=false;
+  $("#app").innerHTML=(S&&S.cenario&&!showIntro)?game():(S&&busy?game():intro());
+}
+</script>
+</body>
+</html>
